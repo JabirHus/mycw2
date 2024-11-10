@@ -1,50 +1,47 @@
 <template>
     <div class="container pt-3">
-        <div class="h1 text-center border rounded bg-light p-2 mb-3">
-            API Client
-        </div>
-        <div class="mb-3">
-            <u>Response data</u>:             
-        </div>
-        <pre>{{ response_data }}</pre>
+        <div class="h1 text-center border rounded bg-light p-2 mb-3">Healthcare Management</div>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-        </button>
+        <!-- Tabs for Patients, Treatments, and Patient-Treatments -->
+        <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="patients-tab" data-bs-toggle="tab" data-bs-target="#patients" type="button" role="tab" aria-controls="patients" aria-selected="true">Patients</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="treatments-tab" data-bs-toggle="tab" data-bs-target="#treatments" type="button" role="tab" aria-controls="treatments" aria-selected="false">Treatments</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="patient-treatments-tab" data-bs-toggle="tab" data-bs-target="#patient-treatments" type="button" role="tab" aria-controls="patient-treatments" aria-selected="false">Patient-Treatments</button>
+            </li>
+        </ul>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="patients" role="tabpanel" aria-labelledby="patients-tab">
+                <PatientTable />
             </div>
-            <div class="modal-body">
-                ...
+            <div class="tab-pane fade" id="treatments" role="tabpanel" aria-labelledby="treatments-tab">
+                <TreatmentTable />
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            <div class="tab-pane fade" id="patient-treatments" role="tabpanel" aria-labelledby="patient-treatments-tab">
+                <PatientTreatmentTable />
             </div>
         </div>
-        </div>
-
     </div>
-  </template>
-  
+</template>
+
 <script>
+import PatientTable from './components/PatientTable.vue';
+import TreatmentTable from './components/TreatmentTable.vue';
+import PatientTreatmentTable from './components/PatientTreatmentTable.vue';
+
 export default {
-    data() {
-        return {
-            response_data: '',
-        }
-    },
-    async mounted() {
-        const response = await fetch('http://localhost:8000/api/test.json')
-        this.response_data = await response.json()
+    components: {
+        PatientTable,
+        TreatmentTable,
+        PatientTreatmentTable
     }
-}
+};
 </script>
+
+<style scoped>
+</style>
