@@ -11,6 +11,8 @@ urlpatterns = [
     path('treatment/<int:treatment_id>/', views.treatment_api, name='treatment_api'),
 
     # PatientTreatment URLs
+    # Replace patient_treatment_api with patient_treatments_api in urls.py
     path('patient-treatments/', views.patient_treatments_api, name='patient_treatments_api'),
-    path('patient-treatment/<int:patient_treatment_id>/', views.patient_treatment_api, name='patient_treatment_api'),
+    path('patient-treatment/<int:patient_treatment_id>/', views.patient_treatments_api, name='patient_treatments_api'),
+
 ]

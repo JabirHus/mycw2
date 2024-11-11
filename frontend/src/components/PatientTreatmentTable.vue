@@ -18,8 +18,8 @@
             <tbody>
                 <tr v-for="(relation, index) in patientTreatments" :key="relation.id">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ relation.patient_name }}</td>
-                    <td>{{ relation.treatment_name }}</td>
+                    <td>{{ relation.patient_name }}</td> <!-- Display patient name -->
+                    <td>{{ relation.treatment_name }}</td> <!-- Display treatment name -->
                     <td>{{ relation.treatment_date }}</td>
                     <td>
                         <button class="btn btn-sm btn-primary me-2" @click="openEditModal(relation)">
@@ -58,7 +58,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="createPatientTreatment" data-bs-dismiss="modal">Save</button>
+                        <button type="button" class="btn btn-primary" @click="createPatientTreatment">Save</button>
                     </div>
                 </div>
             </div>
@@ -73,12 +73,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <label for="edit-treatment-date" class="form-label">Treatment Date</label>
-                        <input v-model="editRelationData.treatment_date" type="date" class="form-control mb-2" id="edit-treatment-date" placeholder="Treatment Date">
+                        <input v-model="editRelationData.treatment_date" type="date" class="form-control mb-2" placeholder="Treatment Date">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="updatePatientTreatment" data-bs-dismiss="modal">Save Changes</button>
+                        <button type="button" class="btn btn-primary" @click="updatePatientTreatment">Save Changes</button>
                     </div>
                 </div>
             </div>
@@ -87,8 +86,6 @@
 </template>
 
 <script>
-import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Ensure Bootstrap is imported
-
 const baseUrl = 'http://localhost:8000';
 
 export default {

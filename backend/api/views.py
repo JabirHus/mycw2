@@ -131,31 +131,35 @@ def patient_treatments_api(request):
 
 
 @csrf_exempt
-def patient_treatment_api(request, patient_treatment_id):
-    """API endpoint for a single PatientTreatment relationship"""
-    try:
-        patient_treatment = PatientTreatment.objects.get(id=patient_treatment_id)
-    except PatientTreatment.DoesNotExist:
-        return JsonResponse({'error': 'PatientTreatment not found'}, status=404)
-
-    if request.method == 'PUT':
+def patient_treatments_api(request):
+    """API endpoint for managing PatientTreatment relationships"""
+    if request.method == 'POST':
         data = json.loads(request.body)
-        patient_treatment.treatment_date = data['treatment_date']
-        patient_treatment.save()
+        patient = Patient.objects.get(id=data['patient_id'])
+        treatment = Treatment.objects.get(id=data['treatment_id'])
+        patient_treatment = PatientTreatment.objects.create(
+            patient=patient,
+            treatment=treatment,
+            treatment_date=data['treatment_date']
+        )
         return JsonResponse({
             'id': patient_treatment.id,
-            'patient': patient_treatment.patient.id,
-            'treatment': patient_treatment.treatment.id,
+            'patient_id': patient.id,
+            'patient_name': patient.name,  # Include patient name
+            'treatment_id': treatment.id,
+            'treatment_name': treatment.name,  # Include treatment name
             'treatment_date': patient_treatment.treatment_date
         })
 
-    if request.method == 'DELETE':
-        patient_treatment.delete()
-        return JsonResponse({})
+    # GET request to return all patient-treatment records with names
+    patient_treatments = PatientTreatment.objects.select_related('patient', 'treatment').all()
+    response_data = [{
+        'id': pt.id,
+        'patient_id': pt.patient.id,
+        'patient_name': pt.patient.name,  # Patient name for display
+        'treatment_id': pt.treatment.id,
+        'treatment_name': pt.treatment.name,  # Treatment name for display
+        'treatment_date': pt.treatment_date
+    } for pt in patient_treatments]
+    return JsonResponse({'patient_treatments': response_data})
 
-    return JsonResponse({
-        'id': patient_treatment.id,
-        'patient': patient_treatment.patient.id,
-        'treatment': patient_treatment.treatment.id,
-        'treatment_date': patient_treatment.treatment_date
-    })
