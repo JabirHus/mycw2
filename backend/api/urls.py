@@ -2,17 +2,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Patient URLs
+    # Endpoint for handling a collection of patients
     path('patients/', views.patients_api, name='patients_api'),
     path('patient/<int:patient_id>/', views.patient_api, name='patient_api'),
 
-    # Treatment URLs
+    # Endpoint for handling a collection of treatments
     path('treatments/', views.treatments_api, name='treatments_api'),
     path('treatment/<int:treatment_id>/', views.treatment_api, name='treatment_api'),
 
-    # PatientTreatment URLs
-    # Replace patient_treatment_api with patient_treatments_api in urls.py
+    # Endpoint for managing patient-treatment relationships
     path('patient-treatments/', views.patient_treatments_api, name='patient_treatments_api'),
-    path('patient-treatment/<int:patient_treatment_id>/', views.patient_treatments_api, name='patient_treatments_api'),
-
+    path('patient-treatment/<int:patient_treatment_id>/', views.patient_treatment_api, name='patient_treatment_api'),
 ]

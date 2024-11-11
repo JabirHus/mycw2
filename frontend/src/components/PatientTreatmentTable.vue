@@ -18,8 +18,8 @@
             <tbody>
                 <tr v-for="(relation, index) in patientTreatments" :key="relation.id">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ relation.patient_name }}</td> <!-- Display patient name -->
-                    <td>{{ relation.treatment_name }}</td> <!-- Display treatment name -->
+                    <td>{{ relation.patient_name }}</td>
+                    <td>{{ relation.treatment_name }}</td>
                     <td>{{ relation.treatment_date }}</td>
                     <td>
                         <button class="btn btn-sm btn-primary me-2" @click="openEditModal(relation)">
@@ -58,7 +58,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="createPatientTreatment">Save</button>
+                        <button type="button" class="btn btn-primary" @click="createPatientTreatment" data-bs-dismiss="modal">Save</button>
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="updatePatientTreatment">Save Changes</button>
+                        <button type="button" class="btn btn-primary" @click="updatePatientTreatment" data-bs-dismiss="modal">Save Changes</button>
                     </div>
                 </div>
             </div>
@@ -86,6 +86,8 @@
 </template>
 
 <script>
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 const baseUrl = 'http://localhost:8000';
 
 export default {

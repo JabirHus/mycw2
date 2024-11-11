@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Patient, Treatment, PatientTreatment
 
-
 @csrf_exempt
 def patients_api(request):
     """API endpoint for the collection of patients"""
@@ -121,33 +120,10 @@ def patient_treatments_api(request):
         )
         return JsonResponse({
             'id': patient_treatment.id,
-            'patient': patient_treatment.patient.id,
-            'treatment': patient_treatment.treatment.id,
-            'treatment_date': patient_treatment.treatment_date
-        })
-
-    patient_treatments = list(PatientTreatment.objects.values())
-    return JsonResponse({'patient_treatments': patient_treatments})
-
-
-@csrf_exempt
-def patient_treatments_api(request):
-    """API endpoint for managing PatientTreatment relationships"""
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        patient = Patient.objects.get(id=data['patient_id'])
-        treatment = Treatment.objects.get(id=data['treatment_id'])
-        patient_treatment = PatientTreatment.objects.create(
-            patient=patient,
-            treatment=treatment,
-            treatment_date=data['treatment_date']
-        )
-        return JsonResponse({
-            'id': patient_treatment.id,
             'patient_id': patient.id,
-            'patient_name': patient.name,  # Include patient name
+            'patient_name': patient.name,
             'treatment_id': treatment.id,
-            'treatment_name': treatment.name,  # Include treatment name
+            'treatment_name': treatment.name,
             'treatment_date': patient_treatment.treatment_date
         })
 
@@ -156,10 +132,44 @@ def patient_treatments_api(request):
     response_data = [{
         'id': pt.id,
         'patient_id': pt.patient.id,
-        'patient_name': pt.patient.name,  # Patient name for display
+        'patient_name': pt.patient.name,
         'treatment_id': pt.treatment.id,
-        'treatment_name': pt.treatment.name,  # Treatment name for display
+        'treatment_name': pt.treatment.name,
         'treatment_date': pt.treatment_date
     } for pt in patient_treatments]
     return JsonResponse({'patient_treatments': response_data})
 
+
+@csrf_exempt
+def patient_treatment_api(request, patient_treatment_id):
+    """API endpoint for a single PatientTreatment relationship"""
+    try:
+        patient_treatment = PatientTreatment.objects.get(id=patient_treatment_id)
+    except PatientTreatment.DoesNotExist:
+        return JsonResponse({'error': 'PatientTreatment not found'}, status=404)
+
+    if request.method == 'PUT':
+        data = json.loads(request.body)
+        patient_treatment.treatment_date = data['treatment_date']
+        patient_treatment.save()
+        return JsonResponse({
+            'id': patient_treatment.id,
+            'patient_id': patient_treatment.patient.id,
+            'patient_name': patient_treatment.patient.name,
+            'treatment_id': patient_treatment.treatment.id,
+            'treatment_name': patient_treatment.treatment.name,
+            'treatment_date': patient_treatment.treatment_date
+        })
+
+    if request.method == 'DELETE':
+        patient_treatment.delete()
+        return JsonResponse({'message': 'PatientTreatment deleted successfully'}, status=204)
+
+    return JsonResponse({
+        'id': patient_treatment.id,
+        'patient_id': patient_treatment.patient.id,
+        'patient_name': patient_treatment.patient.name,
+        'treatment_id': patient_treatment.treatment.id,
+        'treatment_name': patient_treatment.treatment.name,
+        'treatment_date': patient_treatment.treatment_date
+    })
